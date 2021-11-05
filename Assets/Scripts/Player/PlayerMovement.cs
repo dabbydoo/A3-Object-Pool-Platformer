@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,10 +12,24 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     public LayerMask slimeLayer;
 
+    private Animator animator;
     private float horizontal;
     [SerializeField]private float speed = 4f;
     [SerializeField] private float jumpPower = 5f;
     [HideInInspector] public bool isFacingRight = true;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Door")
+        {
+            SceneManager.LoadScene("Win");
+        }
+    }
 
     private void Update()
     {
@@ -35,6 +51,15 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             speed = 5;
+        }
+
+        if(!IsGrounded())
+        {
+            animator.SetBool("isJumping", true);
+        }
+        else
+        {
+            animator.SetBool("isJumping", false);
         }
     }
 
@@ -68,5 +93,9 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = context.ReadValue<Vector2>().x;
 
+        if(horizontal != 0 && IsGrounded())
+            animator.SetBool("isWalking", true);
+        else
+            animator.SetBool("isWalking", false);
     }
 }

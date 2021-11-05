@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerShoot : MonoBehaviour
 {
-    public float fireRate = 0.2f;
+    public float fireRate = 0.5f;
     public Transform firingPoint;
     public Transform shieldPos;
     public GameObject player;
@@ -13,19 +13,22 @@ public class PlayerShoot : MonoBehaviour
     
 
     float timeUntilFire;
+    private Animator animator;
     private GameObject clone;
 
     private void Start()
     {
-     
+        
+        animator = GetComponentInParent<Animator>();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F) && timeUntilFire < Time.time)
+        if(Input.GetKey(KeyCode.L) && timeUntilFire < Time.time)
         {
             Shoot();
             timeUntilFire = Time.time + fireRate;
+            animator.SetTrigger("Attack");
         }
 
         if (Input.GetKeyDown(KeyCode.K))

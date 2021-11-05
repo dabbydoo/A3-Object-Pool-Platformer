@@ -30,7 +30,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
         }
         else if (instance != this as T)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         else
         {
